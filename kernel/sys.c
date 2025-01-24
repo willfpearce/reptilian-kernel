@@ -2766,7 +2766,7 @@ SYSCALL_DEFINE0(get_process_log_level) {
 }
 
 SYSCALL_DEFINE1(set_process_log_level, unsigned char, pll) {
-	if (current_cred()->uid != 0)
+	if ((int)current_cred()->uid.val != 0)
 		return -EPERM;
 
 	if (pll > 7)
