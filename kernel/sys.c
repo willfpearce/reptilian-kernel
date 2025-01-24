@@ -139,7 +139,7 @@
 # define DEFAULT_PROCESS_LOG_LEVEL 0
 #endif
 #ifndef MAX_MESSAGE_LENGTH
-# define MAX_MESSAGE_LENGTH 0
+# define MAX_MESSAGE_LENGTH 128
 #endif
 
 unsigned char process_log_level = DEFAULT_PROCESS_LOG_LEVEL;
@@ -2782,7 +2782,7 @@ SYSCALL_DEFINE2(process_log_send_message, char*, message, unsigned char, pll) {
 		return -EINVAL;
 
 	if (pll > process_log_level)
-		return 0;
+		return (long)pll;
 
 	char tmp[MAX_MESSAGE_LENGTH + 1];
 
