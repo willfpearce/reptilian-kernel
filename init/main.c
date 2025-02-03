@@ -1109,6 +1109,8 @@ static int __ref kernel_init(void *unused)
 	system_state = SYSTEM_RUNNING;
 	numa_default_policy();
 
+	pr_err("\n##### William Pearce (UFID: 8392-4662) Go Gators! #####\n\n");
+
 	rcu_end_inkernel_boot();
 
 	if (ramdisk_execute_command) {
