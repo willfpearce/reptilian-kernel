@@ -131,6 +131,20 @@
 #endif
 
 /*
+ * Will Pearce
+ * This is where process log level global variable is defined
+*/
+
+#ifndef DEFAULT_PROCESS_LOG_LEVEL
+# define DEFAULT_PROCESS_LOG_LEVEL 0
+#endif
+#ifndef MAX_MESSAGE_LENGTH
+# define MAX_MESSAGE_LENGTH 0
+#endif
+
+unsigned char process_log_level = DEFAULT_PROCESS_LOG_LEVEL;
+
+/*
  * this is where the system-wide overflow UID and GID are defined, for
  * architectures that now have 32-bit UID/GID but didn't in the past
  */
@@ -2742,10 +2756,75 @@ SYSCALL_DEFINE1(sysinfo, struct sysinfo __user *, info)
 	return 0;
 }
 
-// Will Pearce
-// Using SYSCALL_DEFINE macros to define syscall behavior
+/*
+ * Will Pearce
+ * Using SYSCALL_DEFINE macros to define syscall behavior
+*/
+
+SYSCALL_DEFINE0(get_process_log_level) {
+	return (long)process_log_level;
+}
+
+SYSCALL_DEFINE1(set_process_log_level, unsigned char, pll) {
+	if (current_cred()->uid != 0)
+		return -EPERM;
+
+	if (pll > 7)
+		return -EINVAL;
+
+	process_log_level = pll;
+
+	return (long)pll;		
+}
+
+SYSCALL_DEFINE2(process_log_send_message, char*, message, unsigned char, pll) {
+	if (pll > 7)
+		return -EINVAL;
+
+	if (pll > process_log_level)
+		return 0;
+
+	char tmp[MAX_MESSAGE_LENGTH + 1];
+
+	if (copy_from_user(tmp, message, sizeof(char)*(MAX_MESSAGE_LENGTH + 1)))
+		return -EFAULT;
+
+	tmp[MAX_MESSAGE_LENGTH] = '\0';
+
+	switch(pll) {
+		case 0:
+			pr_emerg("%s\n", tmp)
+			break;
+		case 1:
+			pr_alert("%s\n", tmp)
+			break;
+		case 2:
+			pr_crit("%s\n", tmp)
+			break;
+		case 3:
+			pr_err("%s\n", tmp)
+			break;
+		case 4:
+			pr_warn("%s\n", tmp)
+			break;
+		case 5:
+			pr_notice("%s\n", tmp)
+			break;
+		case 6:
+			pr_info("%s\n", tmp)
+			break;
+		case 7:
+			pr_DEBUG("%s\n", tmp)
+			break;
+		default:
+			return -EINVAL;
+	}
+
+	return (long)pll;		
+}
+
 SYSCALL_DEFINE1(will_test, long, value) {
-	printk("sys_will_test : sys_will_test was called.\n");
+	printk("sys_will_test: sys_will_test was called.\n");
 	return value;
 }
 
