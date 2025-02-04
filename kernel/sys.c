@@ -2742,6 +2742,13 @@ SYSCALL_DEFINE1(sysinfo, struct sysinfo __user *, info)
 	return 0;
 }
 
+// Will Pearce
+// Using SYSCALL_DEFINE macros to define syscall behavior
+SYSCALL_DEFINE1(will_test, long, value) {
+	printk("sys_will_test : sys_will_test was called.\n")
+	return value;
+}
+
 #ifdef CONFIG_COMPAT
 struct compat_sysinfo {
 	s32 uptime;

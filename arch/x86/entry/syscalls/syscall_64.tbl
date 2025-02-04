@@ -347,6 +347,12 @@
 434	common	pidfd_open		__x64_sys_pidfd_open
 
 #
+# Will Pearce
+# System call #, procedure name, '__x64' + procedure function name
+#
+435 common  will_test    __x64_sys_will_test
+
+#
 # x32-specific system call numbers start at 512 to avoid cache impact
 # for native 64-bit operation. The __x32_compat_sys stubs are created
 # on-the-fly for compat_sys_*() compatibility system calls if X86_X32
