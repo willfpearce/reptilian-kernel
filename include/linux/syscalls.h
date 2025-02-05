@@ -910,9 +910,10 @@ asmlinkage long sys_rseq(struct rseq __user *rseq, uint32_t rseq_len,
 asmlinkage long sys_pidfd_send_signal(int pidfd, int sig,
 				       siginfo_t __user *info,
 				       unsigned int flags);
-
-// Will Pearce
-// Custom system call function prototypes
+/*
+ * Will Pearce
+ * Custom system call function prototypes
+ */
 asmlinkage long sys_get_process_log_level(void);
 asmlinkage long sys_set_process_log_level(unsigned char pll);
 asmlinkage long sys_process_log_send_message(char* message, unsigned char pll);

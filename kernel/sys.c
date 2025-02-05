@@ -133,7 +133,7 @@
 /*
  * Will Pearce
  * This is where process log level global variable is defined
-*/
+ */
 
 #ifndef DEFAULT_PROCESS_LOG_LEVEL
 # define DEFAULT_PROCESS_LOG_LEVEL 0
@@ -2759,16 +2759,18 @@ SYSCALL_DEFINE1(sysinfo, struct sysinfo __user *, info)
 /*
  * Will Pearce
  * Using SYSCALL_DEFINE macros to define syscall behavior
-*/
+ */
 
 SYSCALL_DEFINE0(get_process_log_level) {
 	return (long)process_log_level;
 }
 
 SYSCALL_DEFINE1(set_process_log_level, unsigned char, pll) {
+	// Check if process has root credentials
 	if ((int)current_cred()->uid.val != 0)
 		return -EPERM;
 
+	// Check if new log level is valid
 	if (pll > 7)
 		return -EINVAL;
 
@@ -2778,19 +2780,26 @@ SYSCALL_DEFINE1(set_process_log_level, unsigned char, pll) {
 }
 
 SYSCALL_DEFINE2(process_log_send_message, char*, message, unsigned char, pll) {
+	// Memory allocation for message and prefix
 	char tmp[MAX_MESSAGE_LENGTH];
 	char prefix[3];
 
+	// Check if message log level is valid
 	if (pll > 7)
 		return -EINVAL;
 
+	// Ignore the message if given log level has lower priority (is greater than) current log level
 	if (pll > process_log_level)
 		return (long)pll;
 
+	// Copy message pointer from user to kernel space
 	if (copy_from_user(tmp, message, sizeof(char)*(MAX_MESSAGE_LENGTH)))
 		return -EFAULT;
 
+	// Truncates message to max length 
 	tmp[MAX_MESSAGE_LENGTH - 1] = '\0';
+
+	// Prefix allows message to be logged at provided log level
 	prefix[0] = '\001';
 	prefix[1] = pll + '0';
 	prefix[2] = '\0';
