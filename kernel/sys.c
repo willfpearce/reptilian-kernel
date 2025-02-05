@@ -2778,48 +2778,19 @@ SYSCALL_DEFINE1(set_process_log_level, unsigned char, pll) {
 }
 
 SYSCALL_DEFINE2(process_log_send_message, char*, message, unsigned char, pll) {
+	char tmp[MAX_MESSAGE_LENGTH];
+
 	if (pll > 7)
 		return -EINVAL;
 
 	if (pll > process_log_level)
 		return (long)pll;
 
-	int MESSAGE_BUFFER_LENGTH = MAX_MESSAGE_LENGTH + 1;
-	char tmp[MESSAGE_BUFFER_LENGTH];
-
-	if (copy_from_user(tmp, message, sizeof(char)*(MESSAGE_BUFFER_LENGTH)))
+	if (copy_from_user(tmp, message, sizeof(char)*(MAX_MESSAGE_LENGTH)))
 		return -EFAULT;
 
-	tmp[MAX_MESSAGE_LENGTH] = '\0';
-
-	switch(pll) {
-		case 0:
-			pr_emerg("%s\n", tmp);
-			break;
-		case 1:
-			pr_alert("%s\n", tmp);
-			break;
-		case 2:
-			pr_crit("%s\n", tmp);
-			break;
-		case 3:
-			pr_err("%s\n", tmp);
-			break;
-		case 4:
-			pr_warn("%s\n", tmp);
-			break;
-		case 5:
-			pr_notice("%s\n", tmp);
-			break;
-		case 6:
-			pr_info("%s\n", tmp);
-			break;
-		case 7:
-			pr_DEBUG("%s\n", tmp);
-			break;
-		default:
-			return -EINVAL;
-	}
+	tmp[MAX_MESSAGE_LENGTH - 1] = '\0';
+	printk("%d%s\n", pll, tmp);
 
 	return (long)pll;		
 }
