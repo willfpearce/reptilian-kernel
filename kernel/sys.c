@@ -2784,9 +2784,10 @@ SYSCALL_DEFINE2(process_log_send_message, char*, message, unsigned char, pll) {
 	if (pll > process_log_level)
 		return (long)pll;
 
-	char tmp[MAX_MESSAGE_LENGTH + 1];
+	int MESSAGE_BUFFER_LENGTH = MAX_MESSAGE_LENGTH + 1;
+	char tmp[MESSAGE_BUFFER_LENGTH];
 
-	if (copy_from_user(tmp, message, sizeof(char)*(MAX_MESSAGE_LENGTH + 1)))
+	if (copy_from_user(tmp, message, sizeof(char)*(MESSAGE_BUFFER_LENGTH)))
 		return -EFAULT;
 
 	tmp[MAX_MESSAGE_LENGTH] = '\0';
