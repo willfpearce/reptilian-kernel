@@ -916,7 +916,6 @@ asmlinkage long sys_pidfd_send_signal(int pidfd, int sig,
 asmlinkage long sys_get_process_log_level(void);
 asmlinkage long sys_set_process_log_level(unsigned char pll);
 asmlinkage long sys_process_log_send_message(char* message, unsigned char pll);
-asmlinkage long sys_will_test(long value);
 
 /*
  * Architecture-specific system calls

@@ -353,7 +353,6 @@
 435 common  get_process_log_level    __x64_sys_get_process_log_level
 436 common  set_process_log_level    __x64_sys_set_process_log_level
 437 common  process_log_send_message    __x64_sys_process_log_send_message
-438 common  will_test    __x64_sys_will_test
 
 
 #

@@ -2800,11 +2800,6 @@ SYSCALL_DEFINE2(process_log_send_message, char*, message, unsigned char, pll) {
 	return (long)pll;		
 }
 
-SYSCALL_DEFINE1(will_test, long, value) {
-	printk("sys_will_test: sys_will_test was called.\n");
-	return value;
-}
-
 #ifdef CONFIG_COMPAT
 struct compat_sysinfo {
 	s32 uptime;
