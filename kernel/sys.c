@@ -2793,28 +2793,28 @@ SYSCALL_DEFINE2(process_log_send_message, char*, message, unsigned char, pll) {
 
 	switch(pll) {
 		case 0:
-			pr_emerg("%s\n", tmp)
+			pr_emerg("%s\n", tmp);
 			break;
 		case 1:
-			pr_alert("%s\n", tmp)
+			pr_alert("%s\n", tmp);
 			break;
 		case 2:
-			pr_crit("%s\n", tmp)
+			pr_crit("%s\n", tmp);
 			break;
 		case 3:
-			pr_err("%s\n", tmp)
+			pr_err("%s\n", tmp);
 			break;
 		case 4:
-			pr_warn("%s\n", tmp)
+			pr_warn("%s\n", tmp);
 			break;
 		case 5:
-			pr_notice("%s\n", tmp)
+			pr_notice("%s\n", tmp);
 			break;
 		case 6:
-			pr_info("%s\n", tmp)
+			pr_info("%s\n", tmp);
 			break;
 		case 7:
-			pr_DEBUG("%s\n", tmp)
+			pr_DEBUG("%s\n", tmp);
 			break;
 		default:
 			return -EINVAL;
