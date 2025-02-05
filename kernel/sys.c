@@ -2779,6 +2779,7 @@ SYSCALL_DEFINE1(set_process_log_level, unsigned char, pll) {
 
 SYSCALL_DEFINE2(process_log_send_message, char*, message, unsigned char, pll) {
 	char tmp[MAX_MESSAGE_LENGTH];
+	char prefix[2];
 
 	if (pll > 7)
 		return -EINVAL;
@@ -2790,7 +2791,10 @@ SYSCALL_DEFINE2(process_log_send_message, char*, message, unsigned char, pll) {
 		return -EFAULT;
 
 	tmp[MAX_MESSAGE_LENGTH - 1] = '\0';
-	printk("%d%s\n", pll, tmp);
+	prefix[0] = '\001';
+	prefix[1] = pll + '0';
+
+	printk("%s%s\n", prefix, tmp);
 
 	return (long)pll;		
 }
