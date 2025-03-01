@@ -2804,7 +2804,7 @@ SYSCALL_DEFINE2(process_log_send_message, char*, message, unsigned char, pll) {
 	prefix[1] = pll + '0';
 	prefix[2] = '\0';
 
-	printk("%s%s\n", prefix, tmp);
+	printk("%s %s %s: %s\n", prefix, current->comm, current->pid, tmp);
 
 	return (long)pll;		
 }
